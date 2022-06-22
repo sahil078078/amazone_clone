@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:amazone_clone/commons/widgets/custom_textfield.dart';
 import 'package:amazone_clone/constants/global_variable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,10 @@ class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
   final _signUpFormKey = GlobalKey<FormState>();
   // final _signInFromKey = GlobalKey<FormState>();
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +40,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
               ListTile(
+                contentPadding: EdgeInsets.zero,
                 title: Text(
                   'Create Account',
                   style: GoogleFonts.nunito(
@@ -57,14 +63,17 @@ class _AuthScreenState extends State<AuthScreen> {
                 Form(
                   key: _signUpFormKey,
                   child: Column(
-                    children: const [
-                      Text('SignUp Field'),
+                    children: [
+                      CustomTextField(controller: _nameController),
+                      CustomTextField(controller: _emailController),
+                      CustomTextField(controller: _passwordController),
                     ],
                   ),
                 ),
               ListTile(
+                contentPadding: EdgeInsets.zero,
                 title: Text(
-                  'SignIN',
+                  'Sign In',
                   style: GoogleFonts.nunito(
                     fontSize: 18,
                   ),
