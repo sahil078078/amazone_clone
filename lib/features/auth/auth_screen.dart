@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:amazone_clone/commons/widgets/custom_textfield.dart';
 import 'package:amazone_clone/constants/global_variable.dart';
 import 'package:flutter/material.dart';
