@@ -3,6 +3,7 @@ import 'package:amazone_clone/commons/widgets/custom_textfield.dart';
 import 'package:amazone_clone/constants/global_variable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 enum Auth { signin, signup }
@@ -37,7 +38,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   bool obscureTextPassword = true;
-  IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -119,13 +119,13 @@ class _AuthScreenState extends State<AuthScreen> {
                               // ],
 
                               keyboardType: TextInputType.text,
-                              validator: (value) {
+                              validator: (name) {
                                 Pattern pattern =
                                     (r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
                                 RegExp regExp = RegExp(pattern.toString());
-                                if (value == null || value.isEmpty) {
+                                if (name == null || name.isEmpty) {
                                   return 'Please enter name';
-                                } else if (value.trim().contains(regExp)) {
+                                } else if (name.trim().contains(regExp)) {
                                   return 'Please enter valid name ';
                                 } else {
                                   return null;
@@ -136,10 +136,33 @@ class _AuthScreenState extends State<AuthScreen> {
                               controller: _mobileNumber,
                               lableText: 'Mobile',
                               hindText: 'Enter mobile number',
+                              maxLength: 10,
                               prefixIcon: const Icon(
                                 Icons.phone_android,
                                 color: GlobalVariable.secondaryColor,
                               ),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'[0-9]'),
+                                  // this will alow input only digit,
+                                  // if you press alphabet it don't worked
+                                ),
+                              ],
+                              keyboardType: TextInputType.number,
+                              validator: (mobileNumber) {
+                                Pattern pattern = r'(^(?:[+0]9)?[0-9]{10,}$)';
+                                RegExp regExp = RegExp(pattern.toString());
+                                if (mobileNumber == null ||
+                                    mobileNumber.isEmpty) {
+                                  return 'Please enter mobile number';
+                                } else if (mobileNumber.length != 10) {
+                                  return 'Please enter 10 digit ';
+                                } else if (!regExp.hasMatch(mobileNumber)) {
+                                  return 'Please enter valid number';
+                                } else {
+                                  return null;
+                                }
+                              },
                             ),
                             CustomTextField(
                               controller: _emailController,
@@ -149,6 +172,20 @@ class _AuthScreenState extends State<AuthScreen> {
                                 CupertinoIcons.mail,
                                 color: GlobalVariable.secondaryColor,
                               ),
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (email) {
+                                Pattern pattern =
+                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                RegExp regExp = RegExp(pattern.toString());
+                                if (email == null || email.isEmpty) {
+                                  return 'Please enter email';
+                                } else if (!regExp
+                                    .hasMatch(email.replaceAll(' ', ''))) {
+                                  return 'Please Enter valid email';
+                                } else {
+                                  return null;
+                                }
+                              },
                             ),
                             CustomTextField(
                               controller: _passwordController,
