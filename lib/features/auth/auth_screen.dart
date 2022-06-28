@@ -196,6 +196,24 @@ class _AuthScreenState extends State<AuthScreen> {
                                 CupertinoIcons.lock_shield,
                                 color: GlobalVariable.secondaryColor,
                               ),
+                              keyboardType: TextInputType.text,
+                              maxLength: 30,
+                              errorStyle: const TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              validator: (password) {
+                                Pattern pattern =
+                                    r"^^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+                                RegExp regExp = RegExp(pattern.toString());
+                                if (password == null || password.isEmpty) {
+                                  return 'Please enter password';
+                                } else if (password.length <= 8) {
+                                  return 'At least 8 characters required';
+                                } else if (!password.contains(regExp)) {
+                                  return 'Password must have \nat least one uppercase letter, \none lowercase letter, \none number and \none special character e.g. @\$!%*#?&^_-';
+                                }
+                                return null;
+                              },
                               suffixIcon: GestureDetector(
                                 onTap: () => setState(() {
                                   obscureTextPassword = !obscureTextPassword;

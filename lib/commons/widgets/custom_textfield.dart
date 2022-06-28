@@ -14,6 +14,9 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final int? errorMaxLines;
+  final String? errorText;
+  final TextStyle? errorStyle;
   const CustomTextField(
       {Key? key,
       this.hindText,
@@ -25,6 +28,9 @@ class CustomTextField extends StatelessWidget {
       this.keyboardType,
       this.inputFormatters,
       required this.controller,
+      this.errorMaxLines,
+      this.errorText,
+      this.errorStyle,
       this.validator})
       : super(key: key);
 
@@ -60,6 +66,7 @@ class CustomTextField extends StatelessWidget {
             controller: controller,
             obscureText: obscureText!,
             scrollPhysics: const BouncingScrollPhysics(),
+
             decoration: InputDecoration(
               counterText: '',
               // counterText will hide remain number od word by default
@@ -119,6 +126,9 @@ class CustomTextField extends StatelessWidget {
                   width: 0.75,
                 ),
               ),
+              errorMaxLines: errorMaxLines,
+              errorText: errorText,
+              errorStyle: errorStyle,
             ),
           ),
         ],
