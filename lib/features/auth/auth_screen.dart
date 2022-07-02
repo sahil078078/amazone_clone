@@ -19,7 +19,7 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signup;
   final _signUpFormKey = GlobalKey<FormState>();
-  // final _signInFromKey = GlobalKey<FormState>();
+  final _signInFromKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -280,16 +280,94 @@ class _AuthScreenState extends State<AuthScreen> {
                       right: 8,
                     ),
                     child: Form(
+                      key: _signInFromKey,
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
                         child: Column(
-                          children: const [
-                            Text('bhuro'),
+                          children: [
+                            CustomTextField(
+                              controller: _emailController,
+                              hindText: 'Enter email',
+                              lableText: 'Email',
+                              prefixIcon: const Icon(
+                                CupertinoIcons.mail,
+                                color: GlobalVariable.secondaryColor,
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (email) {
+                                Pattern pattern =
+                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                RegExp regExp = RegExp(pattern.toString());
+                                if (email == null || email.isEmpty) {
+                                  return 'Please enter email';
+                                } else if (!regExp
+                                    .hasMatch(email.replaceAll(' ', ''))) {
+                                  return 'Please Enter valid email';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                            CustomTextField(
+                              controller: _passwordController,
+                              hindText: 'Enter password',
+                              lableText: 'Password',
+                              obscureText: obscureTextPassword,
+                              prefixIcon: const Icon(
+                                CupertinoIcons.lock_shield,
+                                color: GlobalVariable.secondaryColor,
+                              ),
+                              keyboardType: TextInputType.text,
+                              maxLength: 30,
+                              errorStyle: const TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              validator: (password) {
+                                Pattern pattern =
+                                    r"^^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
+                                RegExp regExp = RegExp(pattern.toString());
+                                if (password == null || password.isEmpty) {
+                                  return 'Please enter password';
+                                } else if (password.length <= 8) {
+                                  return 'At least 8 characters required';
+                                } else if (!password.contains(regExp)) {
+                                  return 'Password must have \nat least one uppercase letter, \none lowercase letter, \none number and \none special character e.g. @\$!%*#?&^_-';
+                                }
+                                return null;
+                              },
+                              suffixIcon: GestureDetector(
+                                onTap: () => setState(() {
+                                  obscureTextPassword = !obscureTextPassword;
+                                }),
+                                child: obscureTextPassword
+                                    ? Icon(
+                                        CupertinoIcons.eye,
+                                        color: GlobalVariable.secondaryColor
+                                            .withOpacity(0.5),
+                                      )
+                                    : Icon(
+                                        CupertinoIcons.eye_slash,
+                                        color: GlobalVariable.secondaryColor
+                                            .withOpacity(0.7),
+                                      ),
+                              ),
+                            ),
+                            CustomButtom(
+                              buttonText: 'Sign In',
+                              buttonColor: GlobalVariable.secondaryColor
+                                  .withOpacity(0.8),
+                              onPressed: () {
+                                if (_signInFromKey.currentState!.validate()) {
+                                  _signInFromKey.currentState!.save();
+                                }
+                              },
+                            ),
                           ],
                         ),
                       ),
                     ),
-                  ),
+                  )
               ],
             ),
           ),
