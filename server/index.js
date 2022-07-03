@@ -1,21 +1,25 @@
-console.log('hello world');
+// import from packages
 
 const express = require('express');
+const mongoose = require('mongoose').MongoClient,format = require('util').format;
+// import from other file
+const authRouter = require('./routes/auth.js');
 
-
-
+// init
 const PORT = 3000;
 const app = express();
+const DB = "mongodb+srv://sahil:SahilAorking007@cluster0.ty1ggsg.mongodb.net/?retryWrites=true&w=majority";
 
-// get , post , put , post , 
-app.get(
-    '/hello-world', (req, res) => {
-        res.json({hi:'hello wolrd'}); 
-    }
-);
+// middleware
+   app.use(authRouter);
 
-app.get('/',(req,res)=>{
-    res.json({name:"Dr.Knight"});
+// connection 
+mongoose.connect(DB,(err,db)=>{
+   if(err){
+    throw err;
+   }else{
+    console.log('Connect');
+   }
 });
 app.listen(PORT, () => {
     console.log(`connect in port : ${PORT}`);
